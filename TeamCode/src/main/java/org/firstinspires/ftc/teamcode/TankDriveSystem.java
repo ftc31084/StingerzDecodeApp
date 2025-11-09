@@ -1,55 +1,23 @@
-/*
-Copyright 2025 FIRST Tech Challenge Team 16129
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-associated documentation files (the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge, publish, distribute,
-sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial
-portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-/**
- * This file contains a minimal example of an iterative (Non-Linear) "OpMode". An OpMode is a
- * 'program' that runs in either the autonomous or the TeleOp period of an FTC match. The names
- * of OpModes appear on the menu of the FTC Driver Station. When an selection is made from the
- * menu, the corresponding OpMode class is instantiated on the Robot Controller and executed.
- *
- * Remove the @Disabled annotation on the next line or two (if present) to add this OpMode to the
- * Driver Station OpMode list, or add a @Disabled annotation to prevent this OpMode from being
- * added to the Driver Station.
- */
-public class TankDriveSystem  {
-    public DcMotor rlMotor = null;
-    public DcMotor rrMotor = null;
-    HardwareMap hardwareMap = null;
-    Telemetry telemetry = null;
-    Gamepad gamepad1;
-    Gamepad gamepad2;
+public class TankDriveSystem {
+    public static double SPEED_MULTIPLIER = 0.5;
+    private final HardwareMap hardwareMap;
+    private final Gamepad gamepad1;
+    private final Gamepad gamepad2;
+    private final Telemetry telemetry;
+
+    private DcMotor leftDrive = null;
+    private DcMotor rightDrive = null;
+    private double forward = 0;
+    private double rotate = 0;
+    private double max = 0;
 
     TankDriveSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         this.hardwareMap = hardwareMap;
@@ -59,26 +27,40 @@ public class TankDriveSystem  {
     }
 
     public void init() {
-        telemetry.addData("Status", "Initialized");
-        rlMotor  = hardwareMap.get(DcMotor.class, "rl_motor");
-        rrMotor  = hardwareMap.get(DcMotor.class, "rr_motor");
+        leftDrive = hardwareMap.get(DcMotor.class, "rl_drive");
+        rightDrive = hardwareMap.get(DcMotor.class, "rr_drive");
+
+        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    public void teleop(){
-        double power = -gamepad1.left_stick_y;
+    public void loop() {
+        forward = -gamepad1.left_stick_y;
+        rotate = gamepad1.right_stick_x;
 
-        //Left stick - Drive
-        telemetry.addData("Left stick y", -gamepad1.left_stick_y);
-        telemetry.addData("Left stick x", gamepad1.left_stick_x);
+        double leftPower = (forward + rotate) * SPEED_MULTIPLIER;
+        double rightPower = (forward - rotate) * SPEED_MULTIPLIER;
 
-        telemetry.addData("Left stick y", -gamepad1.right_stick_y);
-        telemetry.addData("Left stick x", gamepad1.right_stick_x);
+        if (leftPower > 1 || rightPower > 1) {
+            max = Math.max(Math.abs(leftPower), Math.abs(rightPower));
+            leftPower /= max;
+            rightPower /= max;
+        }
 
-        rlMotor.setDirection(DcMotor.Direction.FORWARD);
-        rlMotor.setPower(power);
-        rrMotor.setDirection(DcMotor.Direction.FORWARD);
-        rrMotor.setPower(-power);
+        // Run wheels in arcade mode
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+    }
 
+    public void autoPushSample() {
+
+    }
+
+    public void stop() {
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
     }
 }
-
