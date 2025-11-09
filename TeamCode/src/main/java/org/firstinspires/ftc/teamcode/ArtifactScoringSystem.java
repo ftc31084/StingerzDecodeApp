@@ -14,7 +14,8 @@ public class ArtifactScoringSystem {
     private Gamepad previousGamepad2;
     private Telemetry telemetry;
 
-    private DcMotorEx scoringMotor;
+    private DcMotorEx scoringMotorLeft;
+    private DcMotorEx scoringMotorRight;
 
     ArtifactScoringSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         this.hardwareMap = hardwareMap;
@@ -24,7 +25,8 @@ public class ArtifactScoringSystem {
     }
 
     public void init() {
-        scoringMotor = hardwareMap.get(DcMotorEx.class, "scoring_motor");
+        scoringMotorLeft = hardwareMap.get(DcMotorEx.class, "scoring_motor_left");
+        scoringMotorRight = hardwareMap.get(DcMotorEx.class, "scoring_motor_right");
     }
 
     public void runOnce() {
@@ -39,11 +41,14 @@ public class ArtifactScoringSystem {
     }
 
     public void startIntake() {
-        scoringMotor.setPower(LAUNCH_SPEED);
+
+        scoringMotorLeft.setPower(LAUNCH_SPEED);
+        scoringMotorRight.setPower(LAUNCH_SPEED);
     }
 
     public void stop() {
-        scoringMotor.setPower(0);
+        scoringMotorLeft.setPower(0);
+        scoringMotorRight.setPower(0);
     }
 }
 
