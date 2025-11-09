@@ -33,17 +33,16 @@ public class ArtifactScoringSystem {
     }
 
     public void loop() throws InterruptedException {
-        if (gamepad2.left_bumper && !gamepad2.start) {
-            startIntake();
-        }else if (gamepad2.right_bumper) {
+        if (gamepad2.right_bumper) {
+            startLauncher();
+        } else if (gamepad2.left_trigger > 0.1) {
             stop();
         }
     }
 
-    public void startIntake() {
-
+    public void startLauncher() {
         scoringMotorLeft.setPower(LAUNCH_SPEED);
-        scoringMotorRight.setPower(LAUNCH_SPEED);
+        scoringMotorRight.setPower(-LAUNCH_SPEED);
     }
 
     public void stop() {
