@@ -9,6 +9,8 @@ public class TeleopMain extends LinearOpMode {
     MecanumDriveSystem mecanumDriveSystem;
     ArtifactIntakeSystem artifactIntakeSystem;
 
+    ArtifactScoringSystem scoringSystem;
+
     @Override
     public void runOpMode() throws InterruptedException {
 //        tankDrive = new TankDrive(hardwareMap, telemetry, gamepad1, gamepad2);
@@ -20,6 +22,9 @@ public class TeleopMain extends LinearOpMode {
         artifactIntakeSystem = new ArtifactIntakeSystem(hardwareMap, telemetry, gamepad1, gamepad2);
         artifactIntakeSystem.init();
 
+        scoringSystem = new ArtifactScoringSystem(hardwareMap, telemetry, gamepad1, gamepad2);
+        scoringSystem.init();
+
         telemetry.addData(">", "Robot Ready.");
         telemetry.update();
         waitForStart();
@@ -27,10 +32,12 @@ public class TeleopMain extends LinearOpMode {
         while (opModeIsActive()) {
             mecanumDriveSystem.loop();
             artifactIntakeSystem.loop();
+            scoringSystem.loop();
             telemetry.update();
         }
 
         mecanumDriveSystem.stop();
         artifactIntakeSystem.stop();
+        scoringSystem.stop();
     }
 }
