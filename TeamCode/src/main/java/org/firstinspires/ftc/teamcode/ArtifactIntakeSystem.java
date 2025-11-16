@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ArtifactIntakeSystem {
-    public static double INTAKE_SPEED = 0.7;
+    public static double INTAKE_SPEED = 1.0;
     private HardwareMap hardwareMap;
     private Gamepad gamepad1, gamepad2;
     private Gamepad previousGamepad2;
