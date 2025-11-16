@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,11 +9,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ArtifactIntakeSystem {
     public static double INTAKE_SPEED = 1.0;
+    public static double OUTTAKE_SPEED = -0.4;
+
     private HardwareMap hardwareMap;
     private Gamepad gamepad1, gamepad2;
     private Gamepad previousGamepad2;
     private Telemetry telemetry;
-
     private DcMotorEx intakeMotor;
 
     ArtifactIntakeSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -24,6 +26,7 @@ public class ArtifactIntakeSystem {
 
     public void init() {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake_motor");
+        intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void runOnce() {
@@ -44,7 +47,7 @@ public class ArtifactIntakeSystem {
     }
 
     public void startOuttake() {
-        intakeMotor.setPower(-INTAKE_SPEED);
+        intakeMotor.setPower(OUTTAKE_SPEED);
     }
 
     public void stop() {
