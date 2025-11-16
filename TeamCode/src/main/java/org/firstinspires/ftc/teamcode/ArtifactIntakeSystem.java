@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+//
 public class ArtifactIntakeSystem {
     public static double INTAKE_SPEED = 0.6;
     public static double OUTTAKE_SPEED = -0.4;
