@@ -24,7 +24,7 @@ public class RampIntakeSystem {
     }
 
     public void init() {
-        rampMotor = hardwareMap.get(CRServo.class, "ramp_motor");
+        rampMotor = hardwareMap.get(CRServo.class, "ramp_servo");
     }
 
     public void runOnce() {}
