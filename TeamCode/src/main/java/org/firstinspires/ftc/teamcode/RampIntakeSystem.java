@@ -1,0 +1,47 @@
+package org.firstinspires.ftc.teamcode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+public class RampIntakeSystem {
+    public static double RAMP_UP_SPEED = 0.3;
+    public static double RAMP_DOWN_SPEED = -0.3;
+
+    private HardwareMap hardwareMap;
+    private Gamepad gamepad1, gamepad2;
+    private Gamepad previousGamepad2;
+    private Telemetry telemetry;
+
+    private CRServo rampMotor;
+
+    RampIntakeSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+        this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+    }
+
+    public void init() {
+        rampMotor = hardwareMap.get(CRServo.class, "ramp_motor");
+    }
+
+    public void runOnce() {}
+
+    public void loop() throws InterruptedException {
+        if (gamepad2.dpad_up && !gamepad2.start) {
+            upRamp();
+        } else if (gamepad2.dpad_down && !gamepad2.start) {
+            downRamp();
+        } else if (gamepad2.right_bumper && !gamepad2.start) {
+            stopRamp();
+        }
+    }
+
+    public void upRamp() { rampMotor.setPower(RAMP_UP_SPEED);}
+
+    public void downRamp() { rampMotor.setPower(RAMP_DOWN_SPEED); }
+
+    public void stopRamp() { rampMotor.setPower(0.0); }
+}
