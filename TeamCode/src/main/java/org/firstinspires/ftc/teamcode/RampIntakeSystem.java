@@ -30,11 +30,11 @@ public class RampIntakeSystem {
     public void runOnce() {}
 
     public void loop() throws InterruptedException {
-        if (gamepad2.dpad_up && !gamepad2.start) {
+        if (gamepad1.dpad_up && !gamepad1.start) {
             upRamp();
-        } else if (gamepad2.dpad_down && !gamepad2.start) {
+        } else if (gamepad1.dpad_down && !gamepad1.start) {
             downRamp();
-        } else if (gamepad2.right_bumper && !gamepad2.start) {
+        } else if (gamepad1.right_bumper && !gamepad1.start) {
             stopRamp();
         }
     }
