@@ -52,4 +52,3 @@ public class ArtifactIntakeSystem {
         intakeMotor.setPower(0);
     }
 }
-

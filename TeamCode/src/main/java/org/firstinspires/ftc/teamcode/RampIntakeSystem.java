@@ -6,8 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class RampIntakeSystem {
-    public static double RAMP_UP_SPEED = 0.3;
-    public static double RAMP_DOWN_SPEED = -0.3;
+    public static double RAMP_SPEED = 0.99999;
 
     private HardwareMap hardwareMap;
     private Gamepad gamepad1, gamepad2;
@@ -39,9 +38,9 @@ public class RampIntakeSystem {
         }
     }
 
-    public void upRamp() { rampMotor.setPower(RAMP_UP_SPEED);}
+    public void upRamp() { rampMotor.setPower(-RAMP_SPEED);}
 
-    public void downRamp() { rampMotor.setPower(RAMP_DOWN_SPEED); }
+    public void downRamp() { rampMotor.setPower(RAMP_SPEED); }
 
     public void stopRamp() { rampMotor.setPower(0.0); }
 }

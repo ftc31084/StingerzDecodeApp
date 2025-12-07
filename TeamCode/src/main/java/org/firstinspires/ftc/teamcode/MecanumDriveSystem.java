@@ -88,10 +88,10 @@ public class MecanumDriveSystem {
         // We multiply by maxSpeed so that it can be set lower for outreaches
         // When a young child is driving the robot, we may not want to allow full
         // speed.
-        leftFront.setPower(maxSpeed * (frontLeftPower / maxPower));
-        rightFront.setPower(maxSpeed * (frontRightPower / maxPower));
-        leftBack.setPower(maxSpeed * (backLeftPower / maxPower));
-        rightBack.setPower(maxSpeed * (backRightPower / maxPower));
+        leftFront.setPower(-maxSpeed * (frontLeftPower / maxPower));
+        rightFront.setPower(-maxSpeed * (frontRightPower / maxPower));
+        leftBack.setPower(-maxSpeed * (backLeftPower / maxPower));
+        rightBack.setPower(-maxSpeed * (backRightPower / maxPower));
     }
 
     public void stop() {

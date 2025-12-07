@@ -72,4 +72,3 @@ public class ArtifactScoringSystem {
         scoringMotorRight.setVelocity(0);
     }
 }
-
