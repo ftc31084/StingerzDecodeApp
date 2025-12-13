@@ -10,12 +10,30 @@ public class AuotopRedGoal extends LinearOpMode {
     DcMotor leftBack;
     DcMotor rightBack;
 
+    static final double TPI = 537.7/(Math.PI * 4.094);
+    static final double TRACK_WIDTH_INCHES = 8;
+
     @Override
     public void runOpMode() {
         leftFront = hardwareMap.get(DcMotor.class, "fl_drive");
         rightFront = hardwareMap.get(DcMotor.class, "fr_drive");
         leftBack = hardwareMap.get(DcMotor.class, "rl_drive");
         rightBack = hardwareMap.get(DcMotor.class, "rr_drive");
+
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        rightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         waitForStart();
 
@@ -26,108 +44,73 @@ public class AuotopRedGoal extends LinearOpMode {
         }
     }
 
-    private void driveForward(double leftPower, double rightPower, long duration) {
-        leftFront.setPower(leftPower);
-        rightFront.setPower(rightPower);
-        leftBack.setPower(leftPower);
-        rightBack.setPower(rightPower);
-        sleep(duration);
+    private void driveForwardInches(double inches, double power) {
+        int ticks = (int) (inches * TPI);
 
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
+        leftFront.setTargetPosition(leftFront.getCurrentPosition() + ticks);
+        rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
+        leftBack.setTargetPosition(leftBack.getCurrentPosition() + ticks);
+        rightBack.setTargetPosition(rightBack.getCurrentPosition() + ticks);
 
-    private void driveForward(double power, long duration) {
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         leftFront.setPower(power);
         rightFront.setPower(power);
         leftBack.setPower(power);
         rightBack.setPower(power);
-        sleep(duration);
 
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
+        while (opModeIsActive()
+                && leftFront.isBusy()
+                && rightFront.isBusy()
+                && leftBack.isBusy()
+                && rightBack.isBusy()) {
+            idle();
+        }
+
+        stopMotors();
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private void driveBackward(double leftPower, double rightPower, long duration) {
-        leftFront.setPower(-leftPower);
-        rightFront.setPower(-rightPower);
-        leftBack.setPower(-leftPower);
-        rightBack.setPower(-rightPower);
-        sleep(duration);
+    private void turnDegrees(double degrees, double power) {
+        double arcLength = Math.PI * TRACK_WIDTH_INCHES * (degrees / 360.0);
+        int ticks = (int) (arcLength * TPI);
 
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
+        leftFront.setTargetPosition(leftFront.getCurrentPosition() - ticks);
+        leftBack.setTargetPosition(leftBack.getCurrentPosition() - ticks);
+        rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
+        rightBack.setTargetPosition(rightBack.getCurrentPosition() + ticks);
 
-    private void driveBackward(double power, long duration) {
-        leftFront.setPower(-power);
-        rightFront.setPower(-power);
-        leftBack.setPower(-power);
-        rightBack.setPower(-power);
-        sleep(duration);
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
-
-    private void turnLeft(double leftPower, double rightPower, long duration) {
-        leftFront.setPower(-leftPower);
-        rightFront.setPower(rightPower);
-        leftBack.setPower(-leftPower);
-        rightBack.setPower(rightPower);
-        sleep(duration);
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
-
-    private void turnLeft(double power, long duration) {
-        leftFront.setPower(-power);
-        rightFront.setPower(power);
-        leftBack.setPower(-power);
-        rightBack.setPower(power);
-        sleep(duration);
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
-
-    private void turnRight(double leftPower, double rightPower, long duration) {
-        leftFront.setPower(leftPower);
-        rightFront.setPower(-rightPower);
-        leftBack.setPower(leftPower);
-        rightBack.setPower(-rightPower);
-        sleep(duration);
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
-
-    private void turnRight(double power, long duration) {
         leftFront.setPower(power);
-        rightFront.setPower(-power);
         leftBack.setPower(power);
-        rightBack.setPower(-power);
-        sleep(duration);
+        rightFront.setPower(power);
+        rightBack.setPower(power);
 
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
+        while (opModeIsActive()
+                && leftFront.isBusy()
+                && leftBack.isBusy()
+                && rightFront.isBusy()
+                && rightBack.isBusy()) {
+            idle();
+        }
+
+        stopMotors();
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private void stopMotors() {
@@ -135,14 +118,5 @@ public class AuotopRedGoal extends LinearOpMode {
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
-        sleep(500);
-    }
-
-    private void stopMotors(long duration) {
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-        sleep(duration);
     }
 }
