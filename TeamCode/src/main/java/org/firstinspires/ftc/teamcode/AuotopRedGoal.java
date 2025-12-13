@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-public class AutoopRedBox extends LinearOpMode {
+public class AuotopRedGoal extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
