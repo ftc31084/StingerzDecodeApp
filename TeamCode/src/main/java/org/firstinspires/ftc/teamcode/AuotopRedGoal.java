@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 public class AuotopRedGoal extends LinearOpMode {
@@ -9,6 +13,11 @@ public class AuotopRedGoal extends LinearOpMode {
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
+
+    CRServo rampMotor;
+
+    private DcMotorEx scoringMotorLeft;
+    private DcMotorEx scoringMotorRight;
 
     static final double TPI = 537.7/(Math.PI * 4.094);
     static final double TRACK_WIDTH_INCHES = 8;
@@ -39,7 +48,9 @@ public class AuotopRedGoal extends LinearOpMode {
 
         if (opModeIsActive()) {
             // Put code here
-
+            driveForwardInches(60,1);
+            stopMotors();
+            launch(2000);
             stopMotors();
         }
     }
@@ -77,6 +88,7 @@ public class AuotopRedGoal extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
 
     private void turnDegrees(double degrees, double power) {
         double arcLength = Math.PI * TRACK_WIDTH_INCHES * (degrees / 360.0);
@@ -119,4 +131,31 @@ public class AuotopRedGoal extends LinearOpMode {
         leftBack.setPower(0);
         rightBack.setPower(0);
     }
+
+    private void launch(double LAUNCH_TARGET_VELOCITY){
+        scoringMotorLeft = hardwareMap.get(DcMotorEx.class, "launch_motor_left");
+        scoringMotorRight = hardwareMap.get(DcMotorEx.class, "launch_motor_right");
+
+        scoringMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        scoringMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        scoringMotorLeft.setZeroPowerBehavior(BRAKE);
+        scoringMotorRight.setZeroPowerBehavior(BRAKE);
+
+        scoringMotorLeft.setVelocity(LAUNCH_TARGET_VELOCITY);
+        scoringMotorRight.setVelocity(-LAUNCH_TARGET_VELOCITY);
+    }
+
+    private void ramp(String direction){
+        if(direction == "in"){
+            rampMotor.setPower(-0.99999);
+        }else if(direction == "out"){
+            rampMotor.setPower(0.99999);
+        }
+
+    }
+    private void stopRamp(){
+        rampMotor.setPower(0);
+    }
 }
+
