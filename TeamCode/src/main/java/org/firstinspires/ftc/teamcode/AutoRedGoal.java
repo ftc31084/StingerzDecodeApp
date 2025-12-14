@@ -22,6 +22,7 @@ public class AutoRedGoal extends LinearOpMode {
     private DcMotorEx launchMotorRight;
 
     private ArtifactScoringSystem scoringSystem;
+    private ArtifactIntakeSystem intakeSystem;
 
     static final double TPI = 537.7/(Math.PI * 4.094);
     static final double TRACK_WIDTH_INCHES = 8;
@@ -61,20 +62,24 @@ public class AutoRedGoal extends LinearOpMode {
             driveForwardInches(48,1);
             launch();
             turnDegrees(-135,0.8);
+            intakeSystem.startIntake();
             driveForwardInches(30,0.5);
+            intakeSystem.stop();
             driveForwardInches(-30,0.8);
             turnDegrees(135,0.8);
             launch();
             turnDegrees(-135,0.8);
             driveLeft(-24,0.8);
+            intakeSystem.startIntake();
             driveForwardInches(30,0.5);
+            intakeSystem.stop();
             driveForwardInches(-30,0.5);
             driveLeft(24,0.8);
             turnDegrees(135,0.8);
             launch();
             turnDegrees(-135,0.8);
             driveLeft(-24,0.8);
-
+            stopDrive();
 
         }
     }
