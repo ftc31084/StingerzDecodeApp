@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+@Deprecated
 public class RampIntakeSystem {
     public static double RAMP_SPEED = 0.99999;
 

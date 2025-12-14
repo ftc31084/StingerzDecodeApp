@@ -7,15 +7,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class MecanumDriveSystem {
+public class MecanumDriveSystem implements Subsystem {
     private final HardwareMap hardwareMap;
     private final Telemetry telemetry;
     private final Gamepad gamepad1;
     private final Gamepad gamepad2;
 
-    double maxSpeed = 1.0;  // make this slower for outreaches
+    private static double SLOW_DRIVE_FORWARD = 0.3;
+    private static double SLOW_DRIVE_STRAFE = 0.3;
+
+    private static double SPEED_FACTOR = 0.75;
 
     // This declares the four motors needed
     DcMotor leftFront;
@@ -33,11 +35,12 @@ public class MecanumDriveSystem {
         this.gamepad2 = gamepad2;
     }
 
+    @Override
     public void init() {
-        leftFront = hardwareMap.get(DcMotor.class, "fl_drive");
-        rightFront = hardwareMap.get(DcMotor.class, "fr_drive");
         leftBack = hardwareMap.get(DcMotor.class, "rl_drive");
         rightBack = hardwareMap.get(DcMotor.class, "rr_drive");
+        leftFront = hardwareMap.get(DcMotor.class, "fl_drive");
+        rightFront = hardwareMap.get(DcMotor.class, "fr_drive");
 
         // We set the left motors in reverse which is needed for drive trains where the left
         // motors are opposite to the right ones.
@@ -46,10 +49,10 @@ public class MecanumDriveSystem {
 
         // This uses RUN_USING_ENCODER to be more accurate.   If you don't have the encoder
         // wires, you should remove these
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         imu = hardwareMap.get(IMU.class, "imu");
         // This needs to be changed to match the orientation on your robot
@@ -63,8 +66,30 @@ public class MecanumDriveSystem {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
+    public void autoInit() {
+        //TODO: initialize the drive system for auto
+    }
+
+    @Override
     public void loop() {
-        drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        boolean dpadUp = gamepad1.dpad_up;
+        boolean dpadDown = gamepad1.dpad_down;
+        boolean dpadLeft = gamepad1.dpad_left;
+        boolean dpadRight = gamepad1.dpad_right;
+
+        if (dpadUp || dpadDown || dpadLeft || dpadRight) {
+            if (dpadUp) {
+                drive(SLOW_DRIVE_FORWARD, 0, gamepad1.right_stick_x * SPEED_FACTOR);
+            } else if (dpadDown) {
+                drive(-SLOW_DRIVE_FORWARD, 0, gamepad1.right_stick_x * SPEED_FACTOR);
+            } else if (dpadLeft) {
+                drive(0, -SLOW_DRIVE_STRAFE, gamepad1.right_stick_x * SPEED_FACTOR);
+            } else if (dpadRight) {
+                drive(0, SLOW_DRIVE_STRAFE, gamepad1.right_stick_x * SPEED_FACTOR);
+            }
+        } else {
+            drive(-gamepad1.left_stick_y * SPEED_FACTOR, gamepad1.left_stick_x * SPEED_FACTOR, gamepad1.right_stick_x * SPEED_FACTOR);
+        }
     }
 
     public void drive(double forward, double right, double rotate) {
@@ -88,17 +113,17 @@ public class MecanumDriveSystem {
         // We multiply by maxSpeed so that it can be set lower for outreaches
         // When a young child is driving the robot, we may not want to allow full
         // speed.
-        leftFront.setPower(-maxSpeed * (frontLeftPower / maxPower));
-        rightFront.setPower(-maxSpeed * (frontRightPower / maxPower));
-        leftBack.setPower(-maxSpeed * (backLeftPower / maxPower));
-        rightBack.setPower(-maxSpeed * (backRightPower / maxPower));
+        leftFront.setPower(frontLeftPower / maxPower);
+        rightFront.setPower(frontRightPower / maxPower);
+        leftBack.setPower(backLeftPower / maxPower);
+        rightBack.setPower(backRightPower / maxPower);
     }
 
+    @Override
     public void stop() {
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftBack.setPower(0);
         rightBack.setPower(0);
     }
-
 }
