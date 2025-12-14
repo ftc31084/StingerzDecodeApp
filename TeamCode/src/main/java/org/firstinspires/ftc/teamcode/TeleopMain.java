@@ -11,7 +11,7 @@ public class TeleopMain extends LinearOpMode {
 
     ArtifactScoringSystem scoringSystem;
 
-    RampIntakeSystem rampSystem;
+    FeederSystem feederSystem;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,8 +27,8 @@ public class TeleopMain extends LinearOpMode {
         scoringSystem = new ArtifactScoringSystem(hardwareMap, telemetry, gamepad1, gamepad2);
         scoringSystem.init();
 
-        rampSystem = new RampIntakeSystem(hardwareMap, telemetry, gamepad1, gamepad2);
-        rampSystem.init();
+        feederSystem = new FeederSystem(hardwareMap, telemetry, gamepad1, gamepad2);
+        feederSystem.init();
 
         telemetry.addData(">", "Robot Ready.");
         telemetry.update();
@@ -38,7 +38,7 @@ public class TeleopMain extends LinearOpMode {
             mecanumDriveSystem.loop();
             artifactIntakeSystem.loop();
             scoringSystem.loop();
-            rampSystem.loop();
+            feederSystem.loop();
             telemetry.update();
         }
 
