@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 public class AutoRedGoal extends LinearOpMode {
@@ -54,10 +58,24 @@ public class AutoRedGoal extends LinearOpMode {
 
         if (opModeIsActive()) {
             // Put code here
-            driveForwardInches(60,1);
-            stopDrive();
+            driveForwardInches(48,1);
             launch();
-            stopDrive();
+            turnDegrees(-135,0.8);
+            driveForwardInches(30,0.5);
+            driveForwardInches(-30,0.8);
+            turnDegrees(135,0.8);
+            launch();
+            turnDegrees(-135,0.8);
+            driveLeft(-24,0.8);
+            driveForwardInches(30,0.5);
+            driveForwardInches(-30,0.5);
+            driveLeft(24,0.8);
+            turnDegrees(135,0.8);
+            launch();
+            turnDegrees(-135,0.8);
+            driveLeft(-24,0.8);
+
+
         }
     }
 
@@ -78,6 +96,39 @@ public class AutoRedGoal extends LinearOpMode {
         rightFront.setPower(power);
         leftBack.setPower(power);
         rightBack.setPower(power);
+
+        while (opModeIsActive()
+                && leftFront.isBusy()
+                && rightFront.isBusy()
+                && leftBack.isBusy()
+                && rightBack.isBusy()) {
+            idle();
+        }
+
+        stopDrive();
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    private void driveLeft(double inches, double power) {
+        int ticks = (int) (inches * TPI);
+
+        leftFront.setTargetPosition(leftFront.getCurrentPosition() + ticks);
+        rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
+        leftBack.setTargetPosition(leftBack.getCurrentPosition() + ticks);
+        rightBack.setTargetPosition(rightBack.getCurrentPosition() + ticks);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(-power);
+        rightFront.setPower(power);
+        leftBack.setPower(power);
+        rightBack.setPower(-power);
 
         while (opModeIsActive()
                 && leftFront.isBusy()
