@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
-import com.qualcomm.robotcore.hardware.CRServo;
+import static java.lang.Math.abs;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -20,27 +20,25 @@ public class ArtifactScoringSystem implements Subsystem {
     public static double kf = 0;
 
     public static double FEED_TIME_SECONDS = 10.0; //The feeder servo run this long when a shot is requested.
-    public static double LAUNCH_TARGET_VELOCITY = 2000;
-    public static double LAUNCHER_MIN_VELOCITY = 1700;
-    public static double FEEDER_FULL_SPEED = 1.0;
+    public static double LAUNCH_TARGET_VELOCITY = 2100;
+    public static double LAUNCHER_MIN_VELOCITY = 1750;
 
     private final HardwareMap hardwareMap;
-    private final Gamepad gamepad1;
     private final Gamepad gamepad2;
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
+    private FeederSystem feederSystem;
     private DcMotorEx launchMotorLeft;
     private DcMotorEx launchMotorRight;
-    private CRServo launchFeeder;
-    private LaunchState launchState;
 
+    private LaunchState launchState;
     private final ElapsedTime feederTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
-    ArtifactScoringSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+    ArtifactScoringSystem(MyRobot myRobot) {
+        this.hardwareMap = myRobot.getHardwareMap();
+        this.telemetry = myRobot.getTelemetry();
+        this.gamepad2 = myRobot.getGamepad2();
+        this.feederSystem = myRobot.getFeederSystem();
     }
 
     @Override
@@ -54,12 +52,8 @@ public class ArtifactScoringSystem implements Subsystem {
         launchMotorLeft.setZeroPowerBehavior(BRAKE);
         launchMotorRight.setZeroPowerBehavior(BRAKE);
 
-        launchFeeder = hardwareMap.get(CRServo.class, "launch_feeder");
-        launchFeeder.setDirection(DcMotorSimple.Direction.REVERSE);
-
         updatePID();
         stopLauncher();
-        stopFeeder();
 
         launchState = LaunchState.IDLE;
         telemetry.addData("ArtifactScoringSystem", "Initialized");
@@ -85,12 +79,13 @@ public class ArtifactScoringSystem implements Subsystem {
                 break;
             case SPIN_UP:
                 spinUp();
+                feederSystem.open();
                 if (isTargetSpeedReached()) {
                     launchState = LaunchState.LAUNCH;
                 }
                 break;
             case LAUNCH:
-                startFeeder();
+                feederSystem.feedUp();
                 feederTimer.reset();
                 launchState = LaunchState.LAUNCHING;
                 break;
@@ -100,7 +95,7 @@ public class ArtifactScoringSystem implements Subsystem {
                 }
                 break;
             case STOP:
-                stopFeeder();
+                feederSystem.stopFeeder();
                 stopLauncher();
                 launchState = LaunchState.IDLE;
                 break;
@@ -118,7 +113,7 @@ public class ArtifactScoringSystem implements Subsystem {
 
     public boolean isTargetSpeedReached() {
         boolean targetSpeedReached = false;
-        if (launchMotorLeft.getVelocity() > LAUNCHER_MIN_VELOCITY && launchMotorRight.getVelocity() > LAUNCHER_MIN_VELOCITY) {
+        if (abs(launchMotorLeft.getVelocity()) > LAUNCHER_MIN_VELOCITY && abs(launchMotorRight.getVelocity()) > LAUNCHER_MIN_VELOCITY) {
             targetSpeedReached = true;
         }
         return targetSpeedReached;
@@ -129,13 +124,6 @@ public class ArtifactScoringSystem implements Subsystem {
         launchMotorRight.setVelocity(0);
     }
 
-    public void startFeeder() {
-        launchFeeder.setPower(FEEDER_FULL_SPEED);
-    }
-
-    public void stopFeeder() {
-        launchFeeder.setPower(0);
-    }
 
     public void updatePID() {
         launchMotorLeft.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(kp, ki, kd, kf));
@@ -145,7 +133,6 @@ public class ArtifactScoringSystem implements Subsystem {
     @Override
     public void stop() {
         stopLauncher();
-        stopFeeder();
     }
 
     private enum LaunchState {

@@ -1,14 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.IMU;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 
 public class AutoRedGoal extends LinearOpMode {
     DcMotor leftFront;
@@ -16,15 +9,13 @@ public class AutoRedGoal extends LinearOpMode {
     DcMotor leftBack;
     DcMotor rightBack;
 
-    CRServo rampMotor;
-
-    private DcMotorEx launchMotorLeft;
-    private DcMotorEx launchMotorRight;
-
+    MyRobot myRobot;
+    private MecanumDriveSystem driveSystem;
     private ArtifactScoringSystem scoringSystem;
     private ArtifactIntakeSystem intakeSystem;
+    private FeederSystem feederSystem;
 
-    static final double TPI = 537.7/(Math.PI * 4.094);
+    static final double TPI = 537.7 / (Math.PI * 4.094);
     static final double TRACK_WIDTH_INCHES = 8;
 
     @Override
@@ -49,59 +40,53 @@ public class AutoRedGoal extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        scoringSystem = new ArtifactScoringSystem(hardwareMap, telemetry, gamepad1, gamepad2);
-        scoringSystem.init();
-
         telemetry.addData(">", "Auto Ready.");
         telemetry.update();
+
+        MyRobot.ROBOT = MyRobot.Robot.STINGERZ;
+
+        myRobot = new MyRobot(hardwareMap, telemetry, gamepad1, gamepad2);
+        myRobot.init();
+
+        driveSystem = myRobot.getMecanumDriveSystem();
+        scoringSystem = myRobot.getArtifactScoringSystem();
+        intakeSystem = myRobot.getArtifactIntakeSystem();
+        feederSystem = myRobot.getFeederSystem();
 
         waitForStart();
 
         if (opModeIsActive()) {
             // Put code here
-            driveForwardInches(48,1);
+            driveSystem.driveForwardInches(48, 1);
+            waitForDriveComplete();
             launch();
-            turnDegrees(-135,0.8);
+            turnDegrees(-135, 0.8);
             intakeSystem.startIntake();
-            driveForwardInches(30,0.5);
+            driveSystem.driveForwardInches(30, 0.5);
+            waitForDriveComplete();
             intakeSystem.stop();
-            driveForwardInches(-30,0.8);
-            turnDegrees(135,0.8);
+            driveSystem.driveForwardInches(-30, 0.8);
+            waitForDriveComplete();
+            turnDegrees(135, 0.8);
             launch();
-            turnDegrees(-135,0.8);
-            driveLeft(-24,0.8);
+            turnDegrees(-135, 0.8);
+            driveLeft(-24, 0.8);
             intakeSystem.startIntake();
-            driveForwardInches(30,0.5);
+            driveSystem.driveForwardInches(30, 0.5);
+            waitForDriveComplete();
             intakeSystem.stop();
-            driveForwardInches(-30,0.5);
-            driveLeft(24,0.8);
-            turnDegrees(135,0.8);
+            driveSystem.driveForwardInches(-30, 0.5);
+            waitForDriveComplete();
+            driveLeft(24, 0.8);
+            turnDegrees(135, 0.8);
             launch();
-            turnDegrees(-135,0.8);
-            driveLeft(-24,0.8);
-            stopDrive();
-
+            turnDegrees(-135, 0.8);
+            driveLeft(-24, 0.8);
+            driveSystem.stop();
         }
     }
 
-    private void driveForwardInches(double inches, double power) {
-        int ticks = (int) (inches * TPI);
-
-        leftFront.setTargetPosition(leftFront.getCurrentPosition() + ticks);
-        rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
-        leftBack.setTargetPosition(leftBack.getCurrentPosition() + ticks);
-        rightBack.setTargetPosition(rightBack.getCurrentPosition() + ticks);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFront.setPower(power);
-        rightFront.setPower(power);
-        leftBack.setPower(power);
-        rightBack.setPower(power);
-
+    private void waitForDriveComplete() {
         while (opModeIsActive()
                 && leftFront.isBusy()
                 && rightFront.isBusy()
@@ -110,13 +95,14 @@ public class AutoRedGoal extends LinearOpMode {
             idle();
         }
 
-        stopDrive();
+        driveSystem.stop();
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
     private void driveLeft(double inches, double power) {
         int ticks = (int) (inches * TPI);
 
@@ -143,7 +129,7 @@ public class AutoRedGoal extends LinearOpMode {
             idle();
         }
 
-        stopDrive();
+        driveSystem.stop();
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -179,7 +165,7 @@ public class AutoRedGoal extends LinearOpMode {
             idle();
         }
 
-        stopDrive();
+        driveSystem.stop();
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -187,45 +173,12 @@ public class AutoRedGoal extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private void stopDrive() {
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftBack.setPower(0);
-        rightBack.setPower(0);
-    }
-
-//    private void launch(double LAUNCH_TARGET_VELOCITY){
-//        launchMotorLeft = hardwareMap.get(DcMotorEx.class, "launch_motor_left");
-//        launchMotorRight = hardwareMap.get(DcMotorEx.class, "launch_motor_right");
-//
-//        launchMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        launchMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//
-//        launchMotorLeft.setZeroPowerBehavior(BRAKE);
-//        launchMotorRight.setZeroPowerBehavior(BRAKE);
-//
-//        launchMotorLeft.setVelocity(LAUNCH_TARGET_VELOCITY);
-//        launchMotorRight.setVelocity(-LAUNCH_TARGET_VELOCITY);
-//    }
-
-    private void launch() throws InterruptedException{
+    private void launch() throws InterruptedException {
         scoringSystem.spinUp();
         wait(500);
-        scoringSystem.startFeeder();
+        feederSystem.feedUp();
         wait(3000);
         scoringSystem.stop();
     }
-
-//    private void ramp(String direction){
-//        if(direction == "in"){
-//            rampMotor.setPower(-0.99999);
-//        }else if(direction == "out"){
-//            rampMotor.setPower(0.99999);
-//        }
-//
-//    }
-//    private void stopRamp(){
-//        rampMotor.setPower(0);
-//    }
 }
 

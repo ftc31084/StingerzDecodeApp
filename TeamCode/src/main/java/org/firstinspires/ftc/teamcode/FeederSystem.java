@@ -4,54 +4,67 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@Deprecated
 public class FeederSystem implements Subsystem {
-    public static double RAMP_SPEED = 0.99999;
+    public static double RAMP_UP_SPEED = 0.9999;
+    public static double RAMP_DOWN_SPEED = -0.3;
 
-    private HardwareMap hardwareMap;
-    private Gamepad gamepad1, gamepad2;
-    private Gamepad previousGamepad2;
-    private Telemetry telemetry;
+    public static double FEEDER_STOPPER_OPEN = 0.8;
+    public static double FEEDER_STOPPER_CLOSE = 0.55;
 
-    private CRServo launchFeeder;
+    private final HardwareMap hardwareMap;
+    private final Gamepad gamepad2;
+    private final Telemetry telemetry;
 
-    FeederSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+    private CRServo feeder;
+    private Servo feederStopper;
+
+    FeederSystem(MyRobot myRobot) {
+        this.hardwareMap = myRobot.getHardwareMap();
+        this.telemetry = myRobot.getTelemetry();
+        this.gamepad2 = myRobot.getGamepad2();
     }
 
     @Override
     public void init() {
-        launchFeeder = hardwareMap.get(CRServo.class, "launch_feeder");
-        launchFeeder.setDirection(DcMotorSimple.Direction.REVERSE);
+        feeder = hardwareMap.get(CRServo.class, "launch_feeder");
+        feeder.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        feederStopper = hardwareMap.get(Servo.class, "feeder_stopper");
+        feederStopper.setDirection(Servo.Direction.FORWARD);
+
+        stopFeeder();
+        close();
     }
 
     @Override
     public void loop() throws InterruptedException {
-        if (gamepad2.aWasPressed() && !gamepad2.startWasPressed()) {
-            feedUp();
-        } else if (gamepad2.yWasPressed()) {
-            feedUp();
-        } else if (gamepad2.left_trigger > 0.1) {
+        if (gamepad2.left_trigger > 0.1) {
             stopFeeder();
         }
     }
 
     public void feedUp() {
-        launchFeeder.setPower(-RAMP_SPEED);
+        feeder.setPower(RAMP_UP_SPEED);
     }
 
     public void feedDown() {
-        launchFeeder.setPower(RAMP_SPEED);
+        feeder.setPower(RAMP_DOWN_SPEED);
     }
 
     public void stopFeeder() {
-        launchFeeder.setPower(0.0);
+        feeder.setPower(0.0);
+    }
+
+    public void open() {
+        feederStopper.setPosition(FEEDER_STOPPER_OPEN);
+    }
+
+    public void close() {
+        feederStopper.setPosition(FEEDER_STOPPER_CLOSE);
     }
 
     @Override

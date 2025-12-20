@@ -1,36 +1,33 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ArtifactIntakeSystem implements Subsystem {
-    public static double INTAKE_SPEED = 1.0;
+    public static double INTAKE_SPEED = 0.75;
     public static double OUTTAKE_SPEED = -0.4;
-    public static double FEEDER_FULL_SPEED = 1.0;
-    public static double FEEDER_STOPPER_OPEN = 0.3;
-    public static double FEEDER_STOPPER_CLOSE = 0.4;
+    public static double INTAKE_TIMEOUT = 10.0; //The intake runs this long before auto stop
 
     private final HardwareMap hardwareMap;
-    private final Gamepad gamepad1;
     private final Gamepad gamepad2;
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
+    private FeederSystem feederSystem;
     private DcMotorEx intakeMotor;
-    private CRServo feeder;
-    private Servo feederStopper;
+    private IntakeState intakeState;
 
-    ArtifactIntakeSystem(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
-        this.hardwareMap = hardwareMap;
-        this.telemetry = telemetry;
-        this.gamepad1 = gamepad1;
-        this.gamepad2 = gamepad2;
+    private final ElapsedTime intakeTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
+    ArtifactIntakeSystem(MyRobot myRobot) {
+        this.hardwareMap = myRobot.getHardwareMap();
+        this.telemetry = myRobot.getTelemetry();
+        this.gamepad2 = myRobot.getGamepad2();
+        this.feederSystem = myRobot.getFeederSystem();
     }
 
     @Override
@@ -38,37 +35,49 @@ public class ArtifactIntakeSystem implements Subsystem {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake_motor");
         intakeMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        feeder = hardwareMap.get(CRServo.class, "launch_feeder");
-        feeder.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        feederStopper = hardwareMap.get(Servo.class, "feeder_stopper");
-        feederStopper.setDirection(Servo.Direction.FORWARD);
+        intakeState = IntakeState.IDLE;
     }
 
     @Override
     public void loop() throws InterruptedException {
         if (gamepad2.aWasPressed() && !gamepad2.startWasPressed()) {
-            closeFeeder();
-            startIntake();
+            intakeState = IntakeState.START;
         } else if (gamepad2.bWasPressed() && !gamepad2.startWasPressed()) {
-            startOuttake();
+            intakeState = IntakeState.SPINNING_OUT;
         } else if (gamepad2.left_trigger > 0.1) {
-            stop();
-            openFeeder();
+            intakeState = IntakeState.STOP;
+        }
+
+        switch (intakeState) {
+            case START:
+                feederSystem.close();
+                intakeTimer.reset();
+                feederSystem.feedUp();
+                startIntake();
+                intakeState = IntakeState.IDLE;
+                break;
+//            case SPINNING_IN:
+//                if (intakeTimer.seconds() > INTAKE_TIMEOUT) {
+//                    intakeState = IntakeState.STOP;
+//                }
+//                    intakeState = IntakeState.IDLE;
+//                break;
+            case SPINNING_OUT:
+                feederSystem.stopFeeder();
+                startOuttake();
+                intakeState = IntakeState.IDLE;
+                break;
+            case STOP:
+                feederSystem.stopFeeder();
+                stop();
+                intakeState = IntakeState.IDLE;
+            case IDLE:
+                break;
         }
     }
 
     public void startIntake() {
         intakeMotor.setPower(INTAKE_SPEED);
-        feeder.setPower(FEEDER_FULL_SPEED);
-    }
-
-    public void openFeeder() {
-        feederStopper.setPosition(FEEDER_STOPPER_OPEN);
-    }
-
-    public void closeFeeder() {
-        feederStopper.setPosition(FEEDER_STOPPER_CLOSE);
     }
 
     public void startOuttake() {
@@ -78,6 +87,13 @@ public class ArtifactIntakeSystem implements Subsystem {
     @Override
     public void stop() {
         intakeMotor.setPower(0);
-        feeder.setPower(0);
+    }
+
+    private enum IntakeState {
+        IDLE,
+        START,
+        SPINNING_IN,
+        SPINNING_OUT,
+        STOP
     }
 }
