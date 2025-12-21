@@ -104,22 +104,7 @@ public class AutoRedGoal extends LinearOpMode {
     }
 
     private void driveLeft(double inches, double power) {
-        int ticks = (int) (inches * TPI);
-
-        leftFront.setTargetPosition(leftFront.getCurrentPosition() + ticks);
-        rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
-        leftBack.setTargetPosition(leftBack.getCurrentPosition() + ticks);
-        rightBack.setTargetPosition(rightBack.getCurrentPosition() + ticks);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFront.setPower(-power);
-        rightFront.setPower(power);
-        leftBack.setPower(power);
-        rightBack.setPower(-power);
+        driveSystem.driveForwardInches(inches, power);
 
         while (opModeIsActive()
                 && leftFront.isBusy()
@@ -136,6 +121,7 @@ public class AutoRedGoal extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
 
 
     private void turnDegrees(double degrees, double power) {
@@ -172,6 +158,7 @@ public class AutoRedGoal extends LinearOpMode {
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
 
     private void launch() throws InterruptedException {
         scoringSystem.spinUp();
