@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+
+@Autonomous(name = "StingerZ: Auto Red Goal")
 public class AutoRedGoal extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
