@@ -57,9 +57,13 @@ public class AutoRedGoal extends LinearOpMode {
 
         if (opModeIsActive()) {
             // Put code here
+
+            //backup and launch starting artifacts
             driveSystem.driveForwardInches(48, 1);
             waitForDriveComplete();
             launch();
+
+            //pick up and launch first group
             turnDegrees(-135, 0.8);
             intakeSystem.startIntake();
             driveSystem.driveForwardInches(30, 0.5);
@@ -69,6 +73,8 @@ public class AutoRedGoal extends LinearOpMode {
             waitForDriveComplete();
             turnDegrees(135, 0.8);
             launch();
+
+            //pick up and launch second group
             turnDegrees(-135, 0.8);
             driveLeft(-24, 0.8);
             intakeSystem.startIntake();
@@ -80,6 +86,8 @@ public class AutoRedGoal extends LinearOpMode {
             driveLeft(24, 0.8);
             turnDegrees(135, 0.8);
             launch();
+
+            //end off the launch line
             turnDegrees(-135, 0.8);
             driveLeft(-24, 0.8);
             driveSystem.stop();
