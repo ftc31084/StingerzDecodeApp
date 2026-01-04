@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+//
 
 public class ArtifactScoringSystem implements Subsystem {
     public static double kp = 100;

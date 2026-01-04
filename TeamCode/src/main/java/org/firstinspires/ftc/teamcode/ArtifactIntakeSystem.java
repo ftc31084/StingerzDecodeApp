@@ -73,6 +73,7 @@ public class ArtifactIntakeSystem implements Subsystem {
                 intakeState = IntakeState.IDLE;
             case IDLE:
                 break;
+                //
         }
     }
 
