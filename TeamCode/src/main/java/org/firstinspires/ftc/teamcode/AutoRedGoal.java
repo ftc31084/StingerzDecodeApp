@@ -66,6 +66,7 @@ public class AutoRedGoal extends LinearOpMode {
             waitForDriveComplete();
             launch();
 
+            /*
             //pick up and launch first group
             turnDegrees(-135, 0.8);
             intakeSystem.startIntake();
@@ -89,10 +90,11 @@ public class AutoRedGoal extends LinearOpMode {
             driveLeft(24, 0.8);
             turnDegrees(135, 0.8);
             launch();
+            */
 
             //end off the launch line
-            turnDegrees(-135, 0.8);
-            driveLeft(-24, 0.8);
+            turnDegrees(135, 0.8);
+            driveLeft(24, 0.8);
             driveSystem.stop();
         }
     }
@@ -171,9 +173,11 @@ public class AutoRedGoal extends LinearOpMode {
 
     private void launch() throws InterruptedException {
         scoringSystem.spinUp();
+        feederSystem.open();
         wait(500);
         feederSystem.feedUp();
-        wait(3000);
+        wait(4800);
+        feederSystem.close();
         scoringSystem.stop();
     }
 }
