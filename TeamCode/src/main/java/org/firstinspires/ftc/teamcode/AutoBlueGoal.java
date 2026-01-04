@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @Autonomous(name = "StingerZ: Auto Red Goal")
-public class AutoRedGoal extends LinearOpMode {
+public class AutoBlueGoal extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -69,14 +69,14 @@ public class AutoRedGoal extends LinearOpMode {
 
 
             //pick up and launch first group
-            turnDegrees(-337, 0.8);
+            turnDegrees(337, 0.8);
             intakeSystem.startIntake();
             driveSystem.driveForwardInches(-55, 0.1);
             waitForDriveComplete();
             intakeSystem.stop();
             driveSystem.driveForwardInches(45, 0.5);
             waitForDriveComplete();
-            turnDegrees(350, 0.8);
+            turnDegrees(-350, 0.8);
             launch();
 
             /*
@@ -95,7 +95,7 @@ public class AutoRedGoal extends LinearOpMode {
             */
 
             //end off the launch line
-            turnDegrees(-377, 0.8);
+            turnDegrees(377, 0.8);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-32, 1);
             waitForDriveComplete();

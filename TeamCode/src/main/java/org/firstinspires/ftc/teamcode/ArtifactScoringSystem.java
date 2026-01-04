@@ -20,8 +20,8 @@ public class ArtifactScoringSystem implements Subsystem {
     public static double kf = 0;
 
     public static double FEED_TIME_SECONDS = 10.0; //The feeder servo run this long when a shot is requested.
-    public static double LAUNCH_TARGET_VELOCITY = 2100;
-    public static double LAUNCHER_MIN_VELOCITY = 1750;
+    public static double LAUNCH_TARGET_VELOCITY = 2175;
+    public static double LAUNCHER_MIN_VELOCITY = 2000;
 
     private final HardwareMap hardwareMap;
     private final Gamepad gamepad2;

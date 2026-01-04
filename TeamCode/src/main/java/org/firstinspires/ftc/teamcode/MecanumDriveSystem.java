@@ -191,4 +191,23 @@ public class MecanumDriveSystem implements Subsystem {
         leftBack.setPower(power);
         rightBack.setPower(power);
     }
+    public void strafeLeft(double inches, double power) {
+        int ticks = (int) (inches * TPI);
+
+        leftFront.setTargetPosition(leftFront.getCurrentPosition() - ticks);
+        rightFront.setTargetPosition(rightFront.getCurrentPosition() + ticks);
+        leftBack.setTargetPosition(leftBack.getCurrentPosition() + ticks);
+        rightBack.setTargetPosition(rightBack.getCurrentPosition() - ticks);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(power);
+        rightFront.setPower(power);
+        leftBack.setPower(power);
+        rightBack.setPower(power);
+    }
+
 }
