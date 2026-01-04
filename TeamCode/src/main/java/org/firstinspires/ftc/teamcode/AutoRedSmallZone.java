@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.HelperClasses.ArtifactScoringSystem;
+import org.firstinspires.ftc.teamcode.HelperClasses.FeederSystem;
+
 
 @Autonomous(name = "StingerZ: Auto Small Zone (Red)")
 public class AutoRedSmallZone extends LinearOpMode {
@@ -23,6 +26,8 @@ public class AutoRedSmallZone extends LinearOpMode {
     private DcMotorEx launchMotorRight;
     private CRServo launchFeeder;
     private DcMotorEx intakeMotor;
+    private ArtifactScoringSystem scoringSystem;
+    private FeederSystem feederSystem;
 
     /*
      * Variables
@@ -34,7 +39,7 @@ public class AutoRedSmallZone extends LinearOpMode {
     public static double INTAKE_SPEED = 1.0;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         /*
          * Sets up all mapping
          * Should NOT be touched unless adding more motors or fixing something
@@ -183,27 +188,20 @@ public class AutoRedSmallZone extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private void lobBall() {
-        launchFeeder.setPower(FEEDER_FULL_SPEED);
-        launchMotorLeft.setVelocity(LAUNCH_TARGET_VELOCITY);
-        launchMotorRight.setVelocity(-LAUNCH_TARGET_VELOCITY);
-
-        sleep(500);
-
-        launchFeeder.setPower(0);
-        launchMotorLeft.setVelocity(0);
-        launchMotorRight.setVelocity(0);
+    private void lobBall() throws InterruptedException {
+        scoringSystem.spinUp();
+        wait(500);
+        feederSystem.feedUp();
+        wait(3000);
+        scoringSystem.stop();
     }
 
-    private void lobBall(long time) {
-        launchFeeder.setPower(FEEDER_FULL_SPEED);
-        launchMotorLeft.setVelocity(LAUNCH_TARGET_VELOCITY);
-        launchMotorRight.setVelocity(-LAUNCH_TARGET_VELOCITY);
-
-        sleep(time);
-        launchFeeder.setPower(0);
-        launchMotorLeft.setVelocity(0);
-        launchMotorRight.setVelocity(0);
+    private void lobBall(long time1, long time2) throws InterruptedException {
+        scoringSystem.spinUp();
+        wait(time1);
+        feederSystem.feedUp();
+        wait(time2);
+        scoringSystem.stop();
     }
 
     private void intake() {

@@ -4,6 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.HelperClasses.ArtifactIntakeSystem;
+import org.firstinspires.ftc.teamcode.HelperClasses.ArtifactScoringSystem;
+import org.firstinspires.ftc.teamcode.HelperClasses.FeederSystem;
+import org.firstinspires.ftc.teamcode.HelperClasses.MecanumDriveSystem;
+
 
 @Autonomous(name = "StingerZ: Auto Red Goal")
 public class AutoRedGoal extends LinearOpMode {
@@ -132,8 +137,6 @@ public class AutoRedGoal extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-
-
 
     private void turnDegrees(double degrees, double power) {
         double arcLength = Math.PI * TRACK_WIDTH_INCHES * (degrees / 360.0);
