@@ -9,9 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.HelperClasses.ArtifactScoringSystem;
-import org.firstinspires.ftc.teamcode.HelperClasses.FeederSystem;
-
 
 @Autonomous(name = "StingerZ: Auto Small Zone (Red)")
 public class AutoRedSmallZone extends LinearOpMode {

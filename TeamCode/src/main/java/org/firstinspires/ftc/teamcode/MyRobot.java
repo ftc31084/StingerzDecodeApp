@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.HelperClasses.ArtifactIntakeSystem;
-import org.firstinspires.ftc.teamcode.HelperClasses.ArtifactScoringSystem;
-import org.firstinspires.ftc.teamcode.HelperClasses.FeederSystem;
-import org.firstinspires.ftc.teamcode.HelperClasses.MecanumDriveSystem;
 
 public class MyRobot {
     private final HardwareMap hardwareMap;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.HelperClasses;
+package org.firstinspires.ftc.teamcode;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.MyRobot;
-import org.firstinspires.ftc.teamcode.Subsystem;
 
 public class ArtifactScoringSystem implements Subsystem {
     public static double kp = 100;
