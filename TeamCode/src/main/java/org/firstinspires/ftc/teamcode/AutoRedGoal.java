@@ -64,7 +64,7 @@ public class AutoRedGoal extends LinearOpMode {
             //backup and launch starting artifacts
             driveSystem.driveForwardInches(-50, 0.8);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(0.5, 0.2);
+            driveSystem.driveForwardInches(1, 0.2);
             waitForDriveComplete();
             launch();
             waitForDriveComplete();
@@ -72,24 +72,26 @@ public class AutoRedGoal extends LinearOpMode {
             waitForDriveComplete();
 
             //pick up the first group of balls
-            turnDegrees(-373, 0.8);
+            turnDegrees(-371, 0.6);
             intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-15, 0.8);
+            driveSystem.driveForwardInches(-28, 0.8);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-30, 0.1);
+            driveSystem.driveForwardInches(-28, 0.1);
             waitForDriveComplete();
             intakeSystem.stop();
 
             // Launch the first group of balls
-            driveSystem.driveForwardInches(39, 0.5);
+            driveSystem.driveForwardInches(41, 0.5);
             waitForDriveComplete();
-            turnDegrees(380, 0.8);
+            driveSystem.driveForwardInches(-0.5, 0.2);
+            waitForDriveComplete();
+            turnDegrees(330, 0.6);
             launch();
 
             // Drive into a stationary area for Tele-Op
             turnDegrees(-350, 0.8);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-32, 1);
+            driveSystem.driveForwardInches(-25, 1);
             waitForDriveComplete();
             driveSystem.stop();
         }
@@ -151,12 +153,12 @@ public class AutoRedGoal extends LinearOpMode {
     private void launch() throws InterruptedException {
         scoringSystem.spinUp();
         feederSystem.open();
-        sleep(500);
+        sleep(607);
         for(int i = 0; i < 3; i++) {
             feederSystem.feedUp();
             sleep(1200);
             feederSystem.stopFeeder();
-            sleep(800);
+            sleep(400);
             feederSystem.feedUp();
         }
         feederSystem.close();
