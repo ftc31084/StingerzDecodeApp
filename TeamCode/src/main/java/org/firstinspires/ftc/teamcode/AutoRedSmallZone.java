@@ -25,6 +25,11 @@ public class AutoRedSmallZone extends LinearOpMode {
     private DcMotorEx intakeMotor;
     private ArtifactScoringSystem scoringSystem;
     private FeederSystem feederSystem;
+    private MecanumDriveSystem driveSystem;
+    private ArtifactIntakeSystem intakeSystem;
+
+    static final double TPI = 537.7 / (Math.PI * 4.094);
+    static final double TRACK_WIDTH_INCHES = 8;
 
     /*
      * Variables
@@ -85,28 +90,39 @@ public class AutoRedSmallZone extends LinearOpMode {
          */
         if (opModeIsActive()) {
             // Step 1
-            driveForwardInches(20, 0.6);
+            driveSystem.driveForwardInches(20, 0.6);
+            waitForDriveComplete();
             turnDegrees(30, 0.4);
-            lobBall();
+            waitForDriveComplete();
+            launch();
 
             // Step 2
             turnDegrees(110, 0.4);
-            driveForwardInches(10, 0.5);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(10, 0.5);
 
             // Step 3
             turnDegrees(-15, 0.4);
+
             intake();
             driveForwardInches(5, 0.5);
+            waitForDriveComplete();
             driveForwardInches(-5, 0.5);
+            waitForDriveComplete();
 
             // Step 4
             turnDegrees(50, 0.4);
+            waitForDriveComplete();
             driveForwardInches(10, 0.5);
+            waitForDriveComplete();
             turnDegrees(20, 0.4);
+            waitForDriveComplete();
 
             // Step 5
             turnDegrees(100, 0.5);
+            waitForDriveComplete();
             driveForwardInches(20, 0.4);
+            waitForDriveComplete();
 
             stopMotors(); // End of AutoOp
         }
@@ -185,6 +201,22 @@ public class AutoRedSmallZone extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    private void waitForDriveComplete() {
+        while (opModeIsActive()
+                && leftFront.isBusy()
+                && rightFront.isBusy()
+                && leftBack.isBusy()
+                && rightBack.isBusy()) {
+            idle();
+        }
+
+        driveSystem.stop();
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     private void lobBall() throws InterruptedException {
         scoringSystem.spinUp();
         wait(500);
@@ -201,6 +233,20 @@ public class AutoRedSmallZone extends LinearOpMode {
         scoringSystem.stop();
     }
 
+    private void launch() throws InterruptedException {
+        scoringSystem.spinUp();
+        feederSystem.open();
+        sleep(607);
+        for(int i = 0; i < 3; i++) {
+            feederSystem.feedUp();
+            sleep(1200);
+            feederSystem.stopFeeder();
+            sleep(400);
+            feederSystem.feedUp();
+        }
+        feederSystem.close();
+        scoringSystem.stop();
+    }
     private void intake() {
         intakeMotor.setPower(INTAKE_SPEED);
         launchFeeder.setPower(FEEDER_FULL_SPEED);
