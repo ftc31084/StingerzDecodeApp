@@ -152,7 +152,13 @@ public class AutoRedGoal extends LinearOpMode {
         scoringSystem.spinUp();
         feederSystem.open();
         sleep(500);
-        feederSystem.feedUp();
+        for(int i = 0; i < 3; i++) {
+            feederSystem.feedUp();
+            sleep(800);
+            feederSystem.stopFeeder();
+            sleep(100);
+            feederSystem.feedUp();
+        }
         sleep(4800);
         feederSystem.close();
         scoringSystem.stop();
