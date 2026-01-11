@@ -68,22 +68,23 @@ public class AutoRedGoal extends LinearOpMode {
             waitForDriveComplete();
             launch();
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-13, 0.8);
+            driveSystem.driveForwardInches(-14, 0.8);
             waitForDriveComplete();
 
             //pick up the first group of balls
             turnDegrees(-373, 0.8);
             intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-15, 0.8);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-30, 0.1);
+            driveSystem.driveForwardInches(-20, 0.8);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(-35, 0.1);
             waitForDriveComplete();
             intakeSystem.stop();
 
             // Launch the first group of balls
             driveSystem.driveForwardInches(39, 0.5);
             waitForDriveComplete();
-            turnDegrees(380, 0.8);
+            turnDegrees(410, 0.8);
             launch();
 
             // Drive into a stationary area for Tele-Op
@@ -154,11 +155,12 @@ public class AutoRedGoal extends LinearOpMode {
         sleep(500);
         for(int i = 0; i < 3; i++) {
             feederSystem.feedUp();
-            sleep(1000);
+            sleep(800);
             feederSystem.stopFeeder();
-            sleep(500);
+            sleep(100);
             feederSystem.feedUp();
         }
+
         feederSystem.close();
         scoringSystem.stop();
     }
