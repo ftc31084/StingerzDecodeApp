@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-//
+
 @Autonomous(name = "StingerZ: Auto Red Goal")
 public class AutoRedGoal extends LinearOpMode {
     DcMotor leftFront;
@@ -62,40 +62,32 @@ public class AutoRedGoal extends LinearOpMode {
             // Put code here
 
             //backup and launch starting artifacts
-            scoringSystem.spinUp();
-            driveSystem.driveForwardInches(-48, 0.8);
+            driveSystem.driveForwardInches(-50, 0.8);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(0.5, 0.2);
             waitForDriveComplete();
             launch();
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(-13, 0.8);
+            waitForDriveComplete();
 
-
-            //pick up and launch first group
-            turnDegrees(-337, 0.8);
+            //pick up the first group of balls
+            turnDegrees(-373, 0.8);
             intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-55, 0.1);
+            driveSystem.driveForwardInches(-15, 0.8);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(-30, 0.1);
             waitForDriveComplete();
             intakeSystem.stop();
-            driveSystem.driveForwardInches(45, 0.5);
+
+            // Launch the first group of balls
+            driveSystem.driveForwardInches(39, 0.5);
             waitForDriveComplete();
-            turnDegrees(350, 0.8);
+            turnDegrees(380, 0.8);
             launch();
 
-            /*
-            //pick up and launch second group
-            turnDegrees(-135, 0.8);
-            driveLeft(-24, 0.8);
-            intakeSystem.startIntake();
-            driveSystem.driveForwardInches(30, 0.5);
-            waitForDriveComplete();
-            intakeSystem.stop();
-            driveSystem.driveForwardInches(-30, 0.5);
-            waitForDriveComplete();
-            driveLeft(24, 0.8);
-            turnDegrees(135, 0.8);
-            launch();
-            */
-
-            //end off the launch line
-            turnDegrees(-377, 0.8);
+            // Drive into a stationary area for Tele-Op
+            turnDegrees(-350, 0.8);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-32, 1);
             waitForDriveComplete();
@@ -159,11 +151,10 @@ public class AutoRedGoal extends LinearOpMode {
     private void launch() throws InterruptedException {
         scoringSystem.spinUp();
         feederSystem.open();
-        sleep(800);
+        sleep(500);
         feederSystem.feedUp();
         sleep(4800);
         feederSystem.close();
         scoringSystem.stop();
     }
 }
-
