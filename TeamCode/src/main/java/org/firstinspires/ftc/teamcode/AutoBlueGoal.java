@@ -18,8 +18,8 @@ public class AutoBlueGoal extends LinearOpMode {
     private ArtifactIntakeSystem intakeSystem;
     private FeederSystem feederSystem;
 
-    static final double TPI = 537.7 / (Math.PI * 4.094);
-    static final double TRACK_WIDTH_INCHES = 8;
+    static final double TPI = 537.7 / (Math.PI * 5.51181);
+    static final double TRACK_WIDTH_INCHES = 29;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -62,35 +62,42 @@ public class AutoBlueGoal extends LinearOpMode {
             // Put code here
 
             //backup and launch starting artifacts
-            driveSystem.driveForwardInches(-48, 0.6);
+            driveSystem.driveForwardInches(-50, 0.7);
             waitForDriveComplete();
+            driveSystem.driveForwardInches(1, 0.7);
             waitForDriveComplete();
             launch();
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-12, 0.6);
+            turnDegrees(135,0.7);
             waitForDriveComplete();
 
             //pick up the first group of balls
-            turnDegrees(330, 0.6);
-            intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-25, 0.6);
+            driveSystem.strafeLeft(-13,0.4);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-22, 0.1);
+            intakeSystem.startIntake();
+            driveSystem.driveForwardInches(-15,0.6);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(-32, 0.1);
             waitForDriveComplete();
             intakeSystem.stop();
 
             // Launch the first group of balls
-            driveSystem.driveForwardInches(41, 0.5);
+            driveSystem.driveForwardInches(46, 0.7);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-0.5, 0.2);
             waitForDriveComplete();
-            turnDegrees(-363, 0.6);
+            driveSystem.strafeLeft(13,0.4);
+            waitForDriveComplete();
+            turnDegrees(-135,0.7);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(2,0.2);
+            waitForDriveComplete();
             launch();
 
             // Drive into a stationary area for Tele-Op
-            turnDegrees(350, 0.8);
+            turnDegrees(-45, 0.7);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-25, 1);
+            driveSystem.driveForwardInches(25, 1);
             waitForDriveComplete();
             driveSystem.stop();
         }
@@ -155,7 +162,7 @@ public class AutoBlueGoal extends LinearOpMode {
         sleep(607);
         for(int i = 0; i < 3; i++) {
             feederSystem.feedUp();
-            sleep(1200);
+            sleep(1500);
             feederSystem.stopFeeder();
             sleep(400);
             feederSystem.feedUp();
