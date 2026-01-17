@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-
+//
 @Autonomous(name = "StingerZ: Auto Small Zone (Red)")
 public class AutoRedSmallZone extends LinearOpMode {
     /*
