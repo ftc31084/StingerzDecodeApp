@@ -62,19 +62,18 @@ public class AutoBlueGoal extends LinearOpMode {
             // Put code here
 
             //backup and launch starting artifacts
-            driveSystem.driveForwardInches(-48, 0.8);
+            driveSystem.driveForwardInches(-48, 0.6);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(1, 0.2);
             waitForDriveComplete();
             launch();
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-12, 0.8);
+            driveSystem.driveForwardInches(-12, 0.6);
             waitForDriveComplete();
 
             //pick up the first group of balls
             turnDegrees(330, 0.6);
             intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-25, 0.8);
+            driveSystem.driveForwardInches(-25, 0.6);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-22, 0.1);
             waitForDriveComplete();

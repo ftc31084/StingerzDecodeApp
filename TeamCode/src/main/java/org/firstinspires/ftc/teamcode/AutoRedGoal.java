@@ -62,19 +62,17 @@ public class AutoRedGoal extends LinearOpMode {
             // Put code here
 
             //backup and launch starting artifacts
-            driveSystem.driveForwardInches(-50, 0.8);
-            waitForDriveComplete();
-            driveSystem.driveForwardInches(1, 0.2);
+            driveSystem.driveForwardInches(-50, 0.6);
             waitForDriveComplete();
             launch();
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-13, 0.8);
+            driveSystem.driveForwardInches(-13, 0.6);
             waitForDriveComplete();
 
             //pick up the first group of balls
             turnDegrees(-371, 0.6);
             intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-28, 0.8);
+            driveSystem.driveForwardInches(-28, 0.6);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-28, 0.1);
             waitForDriveComplete();
@@ -89,7 +87,7 @@ public class AutoRedGoal extends LinearOpMode {
             launch();
 
             // Drive into a stationary area for Tele-Op
-            turnDegrees(-350, 0.8);
+            turnDegrees(-350, 0.6);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-25, 1);
             waitForDriveComplete();

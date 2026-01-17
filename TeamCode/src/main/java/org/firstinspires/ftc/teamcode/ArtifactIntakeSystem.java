@@ -63,7 +63,7 @@ public class ArtifactIntakeSystem implements Subsystem {
 //                    intakeState = IntakeState.IDLE;
 //                break;
             case SPINNING_OUT:
-                feederSystem.stopFeeder();
+                feederSystem.feedDown();
                 startOuttake();
                 intakeState = IntakeState.IDLE;
                 break;

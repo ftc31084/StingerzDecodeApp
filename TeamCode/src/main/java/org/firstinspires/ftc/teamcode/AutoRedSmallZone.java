@@ -89,42 +89,41 @@ public class AutoRedSmallZone extends LinearOpMode {
          * Actual AutoOp code
          */
         if (opModeIsActive()) {
+
+            driveSystem.driveForwardInches(20,0.6);
+            stopMotors();
+            /*
             // Step 1
-            driveSystem.driveForwardInches(20, 0.6);
+            driveSystem.driveForwardInches(60, 0.6);
             waitForDriveComplete();
-            turnDegrees(30, 0.4);
+            turnDegrees(300, 0.4);
             waitForDriveComplete();
             launch();
 
-            // Step 2
-            turnDegrees(110, 0.4);
+            //Step 2
+            turnDegrees(-300, 0.4);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(10, 0.5);
-
-            // Step 3
-            turnDegrees(-15, 0.4);
-
-            intake();
-            driveForwardInches(5, 0.5);
+            driveSystem.driveForwardInches(-50,0.6);
             waitForDriveComplete();
-            driveForwardInches(-5, 0.5);
+            turnDegrees(400, 0.4);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(-20,0.6);
+            waitForDriveComplete();
+            driveSystem.driveForwardInches(-20,0.6);
             waitForDriveComplete();
 
-            // Step 4
-            turnDegrees(50, 0.4);
+            //Step 3
+            turnDegrees(-400,0.4);
             waitForDriveComplete();
-            driveForwardInches(10, 0.5);
+            driveSystem.driveForwardInches(50,0.6);
             waitForDriveComplete();
-            turnDegrees(20, 0.4);
+            turnDegrees(300,0.4);
             waitForDriveComplete();
+            launch();
+            waitForDriveComplete();
+            turnDegrees();
 
-            // Step 5
-            turnDegrees(100, 0.5);
-            waitForDriveComplete();
-            driveForwardInches(20, 0.4);
-            waitForDriveComplete();
-
-            stopMotors(); // End of AutoOp
+            stopMotors(); // End of AutoOp */
         }
     }
 
