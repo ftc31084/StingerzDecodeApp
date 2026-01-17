@@ -11,7 +11,7 @@ public class AutoRedGoal extends LinearOpMode {
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
-
+//
     MyRobot myRobot;
     private MecanumDriveSystem driveSystem;
     private ArtifactScoringSystem scoringSystem;
