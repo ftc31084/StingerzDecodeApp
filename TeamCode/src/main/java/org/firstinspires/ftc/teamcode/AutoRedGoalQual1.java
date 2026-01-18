@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "StingerZ: Auto Red Goal")
-public class AutoRedGoal extends LinearOpMode {
+
+@Autonomous(name = "StingerZ: Auto Red Goal Qual1")
+public class AutoRedGoalQual1 extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
-
+//
     MyRobot myRobot;
     private MecanumDriveSystem driveSystem;
     private ArtifactScoringSystem scoringSystem;
@@ -66,6 +67,7 @@ public class AutoRedGoal extends LinearOpMode {
             driveSystem.driveForwardInches(1, 0.7);
             waitForDriveComplete();
             launch();
+
             waitForDriveComplete();
             turnDegrees(-135,0.7);
             waitForDriveComplete();
@@ -81,9 +83,7 @@ public class AutoRedGoal extends LinearOpMode {
             intakeSystem.stop();
 
             // Launch the first group of balls
-            driveSystem.driveForwardInches(46, 0.8);
-            waitForDriveComplete();
-            driveSystem.driveForwardInches(-0.5, 0.2);
+            driveSystem.driveForwardInches(40, 0.8);
             waitForDriveComplete();
             driveSystem.strafeLeft(-10,0.4);
             waitForDriveComplete();
@@ -143,7 +143,7 @@ public class AutoRedGoal extends LinearOpMode {
                 && rightBack.isBusy()) {
             idle();
         }
-
+//
         driveSystem.stop();
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

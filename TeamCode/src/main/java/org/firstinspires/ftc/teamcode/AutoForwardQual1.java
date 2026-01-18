@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "StingerZ: Auto Red Goal")
-public class AutoRedGoal extends LinearOpMode {
+@Autonomous(name = "StingerZ: Auto Forward Qual1")
+public class AutoForwardQual1 extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -58,45 +58,12 @@ public class AutoRedGoal extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            // Put code here
-
             //backup and launch starting artifacts
-            driveSystem.driveForwardInches(-50, 0.7);
+            driveSystem.driveForwardInches(20, 0.7);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(1, 0.7);
-            waitForDriveComplete();
-            launch();
-            waitForDriveComplete();
-            turnDegrees(-135,0.7);
-            waitForDriveComplete();
-
-            //pick up the first group of balls
-            driveSystem.strafeLeft(10,0.4);
-            waitForDriveComplete();
-            intakeSystem.startIntake();
-            driveSystem.driveForwardInches(-15,0.7);
-            waitForDriveComplete();
-            driveSystem.driveForwardInches(-30, 0.1);
-            waitForDriveComplete();
-            intakeSystem.stop();
-
-            // Launch the first group of balls
-            driveSystem.driveForwardInches(46, 0.8);
-            waitForDriveComplete();
-            driveSystem.driveForwardInches(-0.5, 0.2);
-            waitForDriveComplete();
-            driveSystem.strafeLeft(-10,0.4);
-            waitForDriveComplete();
-            turnDegrees(130,0.7);
-            waitForDriveComplete();
-            launch();
-
-            // Drive into a stationary area for Tele-Op
-            turnDegrees(45, 0.7);
-            waitForDriveComplete();
-            driveSystem.driveForwardInches(25, 1);
             waitForDriveComplete();
             driveSystem.stop();
+            waitForDriveComplete();
         }
     }
 
