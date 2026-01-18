@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "StingerZ: Auto Forward Qual1")
-public class AutoForwardQual1 extends LinearOpMode {
+@Autonomous(name = "StingerZ: Auto Forward")
+public class AutoForward extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
