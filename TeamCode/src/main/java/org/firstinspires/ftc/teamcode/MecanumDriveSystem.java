@@ -96,9 +96,9 @@ public class MecanumDriveSystem implements Subsystem {
                 drive(SLOW_DRIVE_FORWARD, 0, gamepad1.right_stick_x * SPEED_FACTOR);
             } else if (dpadDown) {
                 drive(-SLOW_DRIVE_FORWARD, 0, gamepad1.right_stick_x * SPEED_FACTOR);
-            } else if (dpadLeft) {
-                drive(0, -SLOW_DRIVE_STRAFE, gamepad1.right_stick_x * SPEED_FACTOR);
             } else if (dpadRight) {
+                drive(0, -SLOW_DRIVE_STRAFE, gamepad1.right_stick_x * SPEED_FACTOR);
+            } else if (dpadLeft) {
                 drive(0, SLOW_DRIVE_STRAFE, gamepad1.right_stick_x * SPEED_FACTOR);
             }
         } else if (gamepad1.left_bumper || gamepad1.right_bumper){
