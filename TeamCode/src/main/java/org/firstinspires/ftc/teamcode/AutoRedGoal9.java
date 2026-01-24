@@ -166,7 +166,7 @@ public class AutoRedGoal9 extends LinearOpMode {
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-//
+
 
     private void launch() throws InterruptedException {
         scoringSystem.spinUp();
