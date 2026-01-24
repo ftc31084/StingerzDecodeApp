@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-
-@Autonomous(name = "StingerZ: Auto Red Goal")
-public class AutoRedGoal extends LinearOpMode {
+@Autonomous(name = "StingerZ: Auto Red Goal (9 balls)")
+public class AutoRedGoal9 extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
-//
+
     MyRobot myRobot;
     private MecanumDriveSystem driveSystem;
     private ArtifactScoringSystem scoringSystem;
@@ -77,12 +76,12 @@ public class AutoRedGoal extends LinearOpMode {
             intakeSystem.startIntake();
             driveSystem.driveForwardInches(-15,0.7);
             waitForDriveComplete();
-            driveSystem.driveForwardInches(-30, 0.1);
+            driveSystem.driveForwardInches(-30, 0.7);
             waitForDriveComplete();
             intakeSystem.stop();
 
             // Launch the first group of balls
-            driveSystem.driveForwardInches(46, 0.8);
+            driveSystem.driveForwardInches(40, 0.8);
             waitForDriveComplete();
             driveSystem.driveForwardInches(-0.5, 0.2);
             waitForDriveComplete();
@@ -90,14 +89,29 @@ public class AutoRedGoal extends LinearOpMode {
             waitForDriveComplete();
             turnDegrees(130,0.7);
             waitForDriveComplete();
+            driveSystem.driveForwardInches(6, 0.6);
+            waitForDriveComplete();
             launch();
 
+            //Pick up second group of artifacts
+            turnDegrees(-135,0.7);
+            waitForDriveComplete();
+            driveSystem.strafeLeft(42,0.6);
+            waitForDriveComplete();
+            intakeSystem.startIntake();
+            driveSystem.driveForwardInches(-45,0.7);
+            waitForDriveComplete();
+            intakeSystem.stop();
+            driveSystem.driveForwardInches(40,1);
+
+            /*
             // Drive into a stationary area for Tele-Op
             turnDegrees(45, 0.7);
             waitForDriveComplete();
             driveSystem.driveForwardInches(25, 1);
             waitForDriveComplete();
             driveSystem.stop();
+            */
         }
     }
 
@@ -144,7 +158,7 @@ public class AutoRedGoal extends LinearOpMode {
                 && rightBack.isBusy()) {
             idle();
         }
-//
+
         driveSystem.stop();
 
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -162,7 +176,7 @@ public class AutoRedGoal extends LinearOpMode {
             feederSystem.feedUp();
             sleep(1500);
             feederSystem.stopFeeder();
-            sleep(400);
+            //sleep(200);
             feederSystem.feedUp();
         }
         feederSystem.close();
