@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "StingerZ: Auto Red Goal (9 balls)")
-public class AutoRedGoal9 extends LinearOpMode {
+@Autonomous(name = "StingerZ: Auto Blue Goal (9 balls)")
+public class AutoBlueGoal9 extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -67,11 +67,11 @@ public class AutoRedGoal9 extends LinearOpMode {
             waitForDriveComplete();
             launch();
             waitForDriveComplete();
-            turnDegrees(-135,0.7);
+            turnDegrees(135,0.7);
             waitForDriveComplete();
 
             //pick up the first group of balls
-            driveSystem.strafeLeft(10,0.4);
+            driveSystem.strafeLeft(-10,0.4);
             waitForDriveComplete();
             intakeSystem.startIntake();
             driveSystem.driveForwardInches(-15,0.7);
@@ -84,18 +84,18 @@ public class AutoRedGoal9 extends LinearOpMode {
             waitForDriveComplete();
             driveSystem.driveForwardInches(-0.5, 0.2);
             waitForDriveComplete();
-            driveSystem.strafeLeft(-10,0.4);
+            driveSystem.strafeLeft(10,0.4);
             waitForDriveComplete();
-            turnDegrees(130,0.7);
+            turnDegrees(-130,0.7);
             waitForDriveComplete();
             driveSystem.driveForwardInches(6, 0.6);
             waitForDriveComplete();
             launch();
 
             //Pick up second group of artifacts
-            turnDegrees(-135,0.7);
+            turnDegrees(135,0.7);
             waitForDriveComplete();
-            driveSystem.strafeLeft(42,0.6);
+            driveSystem.strafeLeft(-42,0.6);
             waitForDriveComplete();
             intakeSystem.startIntake();
             driveSystem.driveForwardInches(-45,0.7);
